@@ -7,26 +7,24 @@
 
 #include <iostream>
 
+void print_error_info() {
+    printf("please run it with `./helloworld 0`, `./helloworld 1` or `./helloworld 2`\n");
+}
 
-int main(int argc, char *argv[]) {
-    QApplication a(argc, argv);
-    MainWindow w;
-    w.show();
-
-    std::cout << "main window created\n" << std::flush;
-
-    wchar_t *program = Py_DecodeLocale(argv[0], NULL);
+void execute_python_program(const std::string &filename) {
+    wchar_t *program = Py_DecodeLocale("", NULL);
     if (program == NULL) {
         fprintf(stderr, "Fatal error: cannot decode argv[0]\n");
         exit(1);
     }
 
-    Py_SetProgramName(program);  /* optional but recommended */
+    Py_SetProgramName(program);  // optional but recommended
 
     Py_Initialize();
 
-    std::string filename = "../qdiag.py";
-    PyObject *obj = Py_BuildValue("s", filename.c_str());
+    printf("executing `%s`\n", filename.c_str());
+
+    PyObject * obj = Py_BuildValue("s", filename.c_str());
     FILE *fp = _Py_fopen_obj(obj, "r+");
     if (fp == NULL) {
         std::cerr << "file `" << filename << "` not found\n\n";
@@ -36,14 +34,41 @@ int main(int argc, char *argv[]) {
     PyRun_SimpleFile(fp, filename.c_str());
     fclose(fp);
 
-    printf("python script `%s` executed\n", filename.c_str());
-
     if (Py_FinalizeEx() < 0) {
-        exit(120);
+        exit(-1);
     }
 
     PyMem_RawFree(program);
+}
 
+int main(int argc, char *argv[]) {
+    if (argc < 2) {
+        print_error_info();
+        exit(0);
+    }
 
-    return a.exec();
+    if (std::string(argv[1]) == "0") {
+        QApplication a(argc, argv);
+        MainWindow w;
+        w.show();
+        return a.exec();
+    }
+
+    if (std::string(argv[1]) == "1") {
+        execute_python_program("../qdiag-with-qapplication.py");
+        return 0;
+    }
+
+    if (std::string(argv[1]) == "2") {
+        QApplication a(argc, argv);
+        MainWindow w;
+        w.show();
+
+        execute_python_program("../qdiag-without-qapplication.py");
+
+        return a.exec();
+    }
+
+    print_error_info();
+    return 0;
 }

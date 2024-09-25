@@ -1,5 +1,4 @@
-#ifndef MAINWINDOW_H
-#define MAINWINDOW_H
+#pragma once
 
 #include <QMainWindow>
 #include "ui_mainwindow.h"
@@ -33,5 +32,3 @@ private slots:
 private:
     Ui::MainWindow *ui;
 };
-
-#endif // MAINWINDOW_H
