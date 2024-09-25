@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.10)
 
-project(helloworld)
+project(hello-qt)
 
 # Find includes in the build directories
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
@@ -33,9 +33,9 @@ endif ()
 # Find the QtWidgets library
 find_package(Qt5 REQUIRED COMPONENTS Widgets)
 
-# Tell CMake to create the helloworld executable
+# Tell CMake to create the hello-qt executable
 add_executable(
-        helloworld
+        hello-qt
         main.cpp
         mainwindow.h
         mainwindow.ui
@@ -43,4 +43,4 @@ add_executable(
 )
 
 # Add the Qt5 Widgets for linking
-target_link_libraries(helloworld Qt5::Widgets)
+target_link_libraries(hello-qt Qt5::Widgets)

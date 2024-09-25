@@ -8,7 +8,7 @@
 #include <iostream>
 
 void print_error_info() {
-    printf("please run it with `./helloworld 0`, `./helloworld 1` or `./helloworld 2`\n");
+    printf("please run it with `./hello-qt 0`, `./hello-qt 1` or `./hello-qt 2`\n");
 }
 
 void execute_python_program(const std::string &filename) {
